@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 475
+  ClientHeight = 420
   ClientWidth = 492
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -34,14 +34,15 @@ object Form1: TForm1
   end
   object mem_Connections: TMemo
     Left = 8
-    Top = 266
+    Top = 218
     Width = 209
     Height = 177
+    ReadOnly = True
     TabOrder = 2
   end
   object btn_SaveConnection: TButton
     Left = 54
-    Top = 235
+    Top = 187
     Width = 75
     Height = 25
     Caption = 'Adicionar'
@@ -50,7 +51,7 @@ object Form1: TForm1
   end
   object edt_ConnectionOne: TLabeledEdit
     Left = 40
-    Top = 142
+    Top = 94
     Width = 121
     Height = 23
     EditLabel.Width = 56
@@ -62,7 +63,7 @@ object Form1: TForm1
   end
   object edt_ConnectionTwo: TLabeledEdit
     Left = 40
-    Top = 194
+    Top = 146
     Width = 121
     Height = 23
     EditLabel.Width = 56
@@ -74,7 +75,7 @@ object Form1: TForm1
   end
   object btn_ListConnection: TButton
     Left = 304
-    Top = 221
+    Top = 187
     Width = 105
     Height = 25
     Caption = 'Verificar Conex'#227'o'
@@ -83,14 +84,15 @@ object Form1: TForm1
   end
   object mem_ListConnect: TMemo
     Left = 240
-    Top = 266
+    Top = 218
     Width = 233
     Height = 177
+    ReadOnly = True
     TabOrder = 7
   end
   object edt_ConfConnectionOne: TLabeledEdit
-    Left = 304
-    Top = 142
+    Left = 297
+    Top = 94
     Width = 121
     Height = 23
     EditLabel.Width = 56
@@ -101,8 +103,8 @@ object Form1: TForm1
     Text = ''
   end
   object edt_ConfConnectionTwo: TLabeledEdit
-    Left = 304
-    Top = 194
+    Left = 297
+    Top = 146
     Width = 121
     Height = 23
     EditLabel.Width = 56

@@ -3,7 +3,7 @@ unit Controller.Network;
 interface
 
 uses
-  Interfaced.INetwork, System.Classes, System.SysUtils, Vcl.StdCtrls;
+  Interfaced.INetwork, System.Classes, System.SysUtils, Vcl.StdCtrls, StrUtils;
 
 type
   TNetwork = class(TInterfacedObject, INetwork)
@@ -14,7 +14,9 @@ type
     ActiveConnections: integer;
     function ConnectionStillAvailable: Boolean;
     procedure VerificaLigacao(var CheckConection: Boolean;
-      const VerifyConnectionNumber: integer; var RelatedConnections: string);
+      const VerifyConnectionNumber: Integer; var RelatedConnections: string;
+      testearr: Integer);
+    function verifyConnection(Element1, Element2: Integer): string;
   public
     constructor Create(const NumberConnections: integer);
     destructor Destroy; override;
@@ -71,7 +73,7 @@ begin
       raise Exception.Create('Limite permitido excedido.');
   end
   else
-    raise Exception.Create('Não é permitido valores negativos.');
+    raise Exception.Create('Nï¿½o ï¿½ permitido valores negativos.');
 
 end;
 
@@ -108,20 +110,24 @@ begin
       VerificaLigacao(ConnectionElement2, ElementVerify2, ConnectionTwo);
     end
     else
-      raise Exception.Create('Consulta fora do limite de conexões permitidas.');
+      raise Exception.Create('Consulta fora do limite de conexï¿½es permitidas.');
   end
   else
     raise Exception.Create('Permitido apenas valores positivos.');
 
   if ConnectionElement1 then
-    Result :=  'Conexão '+ ElementVerify1.ToString +' tem vinculo com: ' + ConnectionOne
+    Result :=  'Conexï¿½o '+ ElementVerify1.ToString +' tem vinculo com: ' + ConnectionOne
   else
-    Result := 'Conexão '+ ElementVerify1.ToString + 'não tem vinculo.';;
+    Result := 'Conexï¿½o '+ ElementVerify1.ToString + 'nï¿½o tem vinculo.';;
 
   if ConnectionElement2 then
-    Result := Result + sLineBreak +  'Conexão '+ ElementVerify2.ToString +' tem vinculo com: ' + ConnectionTwo
+    Result := Result + sLineBreak +  'Conexï¿½o '+ ElementVerify2.ToString +' tem vinculo com: ' + ConnectionTwo
   else
-    Result := Result + sLineBreak + 'Conexão '+ ElementVerify2.ToString + 'não tem vinculo.';
+    Result := Result + sLineBreak + 'Conexï¿½o '+ ElementVerify2.ToString + 'nï¿½o tem vinculo.';
+
+  Result := Result + sLineBreak + verifyConnection(ElementVerify1,
+    ElementVerify2);
+
 end;
 
 procedure TNetwork.VerificaLigacao(var CheckConection: Boolean;
@@ -145,6 +151,77 @@ begin
         FConectionsList.KeyNames[Count];
     end;
   end;
+end;
+
+function TNetwork.verifyConnection(Element1, Element2: Integer): string;
+var
+  Vlr1, Vlr2: string;
+  Count, countArray, RunArray: Integer;
+  ArrayOfConnections: array of string;
+begin
+
+  countArray := 0;
+
+  for Count := 0 to Pred(FConectionsList.Count) do
+  begin
+    Vlr1 := FConectionsList.ValueFromIndex[Count];
+    Vlr2 := FConectionsList.KeyNames[Count];
+
+    if pos(Element1.ToString, FConectionsList[Count]) > 0 then
+    begin
+      if not MatchStr(FConectionsList.ValueFromIndex[Count], ArrayOfConnections)
+      then
+      begin
+        SetLength(ArrayOfConnections, countArray + 1);
+        ArrayOfConnections[countArray] := FConectionsList.ValueFromIndex[Count];
+        Inc(countArray);
+      end;
+
+      if not MatchStr(FConectionsList.KeyNames[Count], ArrayOfConnections) then
+      begin
+        SetLength(ArrayOfConnections, countArray + 1);
+        ArrayOfConnections[countArray] := FConectionsList.KeyNames[Count];
+        Inc(countArray);
+      end;
+    end;
+  end;
+
+  for Count := 0 to Pred(FConectionsList.Count) do
+  begin
+    Vlr1 := FConectionsList.ValueFromIndex[Count];
+    Vlr2 := FConectionsList.KeyNames[Count];
+
+    for RunArray := Low(ArrayOfConnections) to High(ArrayOfConnections) do
+    begin
+      if pos(ArrayOfConnections[RunArray], FConectionsList[Count]) > 0 then
+      begin
+        if not MatchStr(FConectionsList.ValueFromIndex[Count],
+          ArrayOfConnections) then
+        begin
+          SetLength(ArrayOfConnections, countArray + 1);
+          ArrayOfConnections[countArray] :=
+            FConectionsList.ValueFromIndex[Count];
+          Inc(countArray);
+        end;
+
+        if not MatchStr(FConectionsList.KeyNames[Count], ArrayOfConnections)
+        then
+        begin
+          SetLength(ArrayOfConnections, countArray + 1);
+          ArrayOfConnections[countArray] := FConectionsList.KeyNames[Count];
+          Inc(countArray);
+        end;
+      end;
+    end;
+
+  end;
+
+  if MatchStr(IntToStr(Element1), ArrayOfConnections) and
+    MatchStr(IntToStr(Element2), ArrayOfConnections) then
+    Result := sLineBreak + 'Conectado'
+  else
+    Result := sLineBreak + 'Desconectado';
+
 end;
 
 end.
